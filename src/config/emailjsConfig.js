@@ -1,8 +1,8 @@
 import emailjs from 'emailjs-com';
 
-// Credenciales y plantillas configuradas
+// Credenciales oficiales de EmailJS para Haruss Cake
 export const EMAILJS_CONFIG = {
-  SERVICE_ID: import.meta.env.VITE_EMAILJS_SERVICE_ID || '', // Se lee desde .env o Vercel
+  SERVICE_ID: 'service_1y0tgd4',
   PUBLIC_KEY: 'bQovyKh5HgjqtawTn',
   TEMPLATES: {
     CORTE: 'template_u4xacfp',
@@ -15,13 +15,8 @@ export const EMAILJS_CONFIG = {
  */
 export const sendNotification = async (templateId, templateParams) => {
   try {
-    const serviceId = EMAILJS_CONFIG.SERVICE_ID;
-    if (!serviceId) {
-      console.warn("EmailJS: No se ha definido VITE_EMAILJS_SERVICE_ID en las variables de entorno.");
-      return null;
-    }
     const response = await emailjs.send(
-      serviceId,
+      EMAILJS_CONFIG.SERVICE_ID,
       templateId,
       templateParams,
       EMAILJS_CONFIG.PUBLIC_KEY
@@ -35,7 +30,7 @@ export const sendNotification = async (templateId, templateParams) => {
 };
 
 /**
- * Disparador específico: Notificación de Corte / Depósito con comprobante
+ * Notificación automática de Corte / Depósito con comprobante
  */
 export const notificarCorte = async ({ to_email, nombre_marca, monto, fecha, comprobante_url }) => {
   return await sendNotification(EMAILJS_CONFIG.TEMPLATES.CORTE, {
@@ -48,7 +43,7 @@ export const notificarCorte = async ({ to_email, nombre_marca, monto, fecha, com
 };
 
 /**
- * Disparador específico: Entrada o Retiro físico de mercancía
+ * Notificación automática de Entrada o Retiro físico de mercancía
  */
 export const notificarMovimientoInventario = async ({ to_email, nombre_marca, tipo_movimiento, sku_producto, cantidad, autorizado_por }) => {
   return await sendNotification(EMAILJS_CONFIG.TEMPLATES.INVENTARIO, {
